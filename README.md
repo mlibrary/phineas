@@ -43,6 +43,7 @@ Terms we've used so far:
 -   **Front page** *(noun):*
 -   **Application team** *(noun):*
 -   **Instance** *(noun):*
+-   **Prototype** *(noun):*
 
 Naming
 ------
