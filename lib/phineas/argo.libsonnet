@@ -163,7 +163,7 @@
        *     to HEAD (of the primary branch, typicaly "main")
        */
       tanka(name, path, repoURL=$.argo.config.repoURL, targetRevision='HEAD', namespace=null):
-        $.argo.app.git(name, '.', repoURL, targetRevision) + {
+        $.argo.app.git(name, '.', repoURL, targetRevision, namespace) + {
           spec+: {
             source+: {
               plugin+: {
