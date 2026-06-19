@@ -160,7 +160,7 @@
       */
     config_file(service, port, require_proxy=true): |||
       global
-      log stdout format raw daemon debug
+        log stdout format raw daemon debug
 
       defaults
         mode http
