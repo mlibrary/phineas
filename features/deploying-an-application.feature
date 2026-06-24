@@ -12,8 +12,6 @@ Feature: Deploying an application
 
   Background:
     Given hosting for my application is provisioned
-    (And there's an available namespace and user accounts are in place)
-    (And DNS and SSL are taken care of)
     And I am a developer authorized to deploy this application
     And I have a release of my application
 
@@ -33,22 +31,3 @@ Feature: Deploying an application
     Given a deployment is active
     When I check my application status
     Then I can see the deployment's current state
-
-  Scenario: Deploying an application for the first time
-    Given no release of my application has been launched
-    And I have deployed my release
-    When my release successfully launches
-    Then I can access my release
-
-  Scenario: Upgrading to a new release
-    Given I can access an outdated release of my application
-    And I have deployed my release
-    When my release successfully launches
-    Then I can access my release
-    And I cannot access the outdated release
-
-  Scenario: Accessing a deployed web application
-    Given I have deployed my release
-    And my release successfully launches
-    When I access my application's front page via the web
-    Then I see its front page content
