@@ -1,4 +1,9 @@
 {
+  phineas:: {
+    repoURL: 'https://github.com/mlibrary/phineas',
+    revision: 'HEAD',
+  },
+
   argo:: {
     // Global config for convenience defaults.
     config: {
@@ -138,11 +143,7 @@
       git(name, path, repoURL=$.argo.config.repoURL, targetRevision='HEAD', namespace=null):
         $.argo.app.prototype(name, namespace) + {
           spec+: {
-            source+: {
-              repoURL: repoURL,
-              path: path,
-              targetRevision: targetRevision,
-            },
+            source+: $.argo.source.git(path, repoURL, targetRevision),
           },
         },
 
@@ -165,16 +166,7 @@
       tanka(name, path, repoURL=$.argo.config.repoURL, targetRevision='HEAD', namespace=null):
         $.argo.app.git(name, '.', repoURL, targetRevision, namespace) + {
           spec+: {
-            source+: {
-              plugin+: {
-                env+: [
-                  {
-                    name: 'TANKA_PATH',
-                    value: path,
-                  },
-                ],
-              },
-            },
+            source+: $.argo.source.tanka(path, repoURL, targetRevision),
           },
         },
 
@@ -223,14 +215,7 @@
       helm(repoURL, chart, targetRevision='HEAD', name=chart, namespace=name, releaseName=name):
         $.argo.app.prototype(name) + {
           spec+: {
-            source+: {
-              chart: chart,
-              repoURL: repoURL,
-              targetRevision: targetRevision,
-              helm: {
-                releaseName: releaseName,
-              },
-            },
+            source+: $.argo.source.helm(repoURL, chart, targetRevision, releaseName),
             destination+: {
               namespace: namespace,
             },
@@ -240,6 +225,94 @@
           },
         },
 
+      /**
+        * Generate an Argo CD Application object with multiple sources.
+        *
+        * Multi-source applications are useful in cases where a small set of
+        * supplementary resources or overrides extends a base Application to
+        * make it complete. Two prominent examples are:
+        *
+        *   1. Where the main resources are in one repository and shared
+        *      config or credentials are in another
+        *   2. Where there is a Helm chart for the main resources, but it
+        *      either needs values from another repository, or additional
+        *      resources best managed together as a single application
+        *
+        * @see https://argo-cd.readthedocs.io/en/stable/user-guide/multiple_sources/
+        *
+        * @param name The name of Argo Application
+        * @param sources The array of sources to combine in order; see the
+        *     $.argo.source helpers for different types
+        * @param namespace The destination namespace for installation
+        *
+        * @example $.argo.app.multisource('example-app', sources=[
+        *            $.argo.source.helm('https://some.chart/url', 'example-app'),
+        *            $.argo.source.git('manifests/sealed-credentials.yaml'),
+        *          ])
+        */
+      multisource(name, sources, namespace=null):
+        $.argo.app.prototype(name, namespace) + {
+          spec+: {
+            source: {},
+            sources: sources
+          }
+        },
+
     },
+
+    /**
+      * Helpers to generate the `source` section of an Argo CD Application.
+      *
+      * These helpers allow us to use a single- or multi-source application without
+      * duplication of these details.
+      */
+    source: {
+      /**
+        * Generate the source for a Git repository; see $.argo.app.git
+        */
+      git(path, repoURL=$.argo.config.repoURL, targetRevision='HEAD'): {
+        repoURL: repoURL,
+        path: path,
+        targetRevision: targetRevision,
+      },
+
+      /**
+        * Generate the source for a Tanka environment; see $.argo.app.tanka
+        */
+      tanka(path, repoURL=$.argo.config.repoURL, targetRevision='HEAD'):
+        $.argo.source.git(path, repoURL, targetRevision) + {
+          plugin+: {
+            env+: [
+              {
+                name: 'TANKA_PATH',
+                value: path,
+              },
+            ],
+          },
+        },
+
+      /**
+        * Generate the source for a kube-common app; see $.argo.app.common
+        */
+      common(name, branch):
+        $.argo.source.tanka(
+          path='environments/%s' % name,
+          repoURL=$.argo.const.kube_common,
+          targetRevision=branch,
+        ),
+
+      /**
+        * Generate the source for a Helm chart; see $.argo.app.git
+        */
+      helm(repoURL, chart, targetRevision='HEAD', releaseName=chart): {
+        chart: chart,
+        repoURL: repoURL,
+        targetRevision: targetRevision,
+        helm: {
+          releaseName: releaseName,
+        },
+      },
+    },
+
   },
 }
