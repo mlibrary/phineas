@@ -213,13 +213,13 @@
        * @example solr: $.argo.app.helm('https://charts.bitnami.com/bitnami', 'redis', '^19.5.5')
        */
       helm(repoURL, chart, targetRevision='HEAD', name=chart, namespace=name, releaseName=name):
-        $.argo.app.prototype(name) + {
+        $.argo.app.prototype(name, namespace) + {
           spec+: {
             source+: $.argo.source.helm(repoURL, chart, targetRevision, releaseName),
             destination+: {
               namespace: namespace,
             },
-            syncPolicy: {
+            syncPolicy+: {
               automated: {},
             },
           },
