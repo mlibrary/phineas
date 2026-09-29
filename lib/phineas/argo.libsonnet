@@ -253,7 +253,7 @@
       multisource(name, sources, namespace=null):
         $.argo.app.prototype(name, namespace) + {
           spec+: {
-            source: {},
+            source:: null,
             sources: sources
           }
         },
