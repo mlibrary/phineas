@@ -302,7 +302,7 @@
         ),
 
       /**
-        * Generate the source for a Helm chart; see $.argo.app.git
+        * Generate the source for a Helm chart; see $.argo.app.helm
         */
       helm(repoURL, chart, targetRevision='HEAD', releaseName=chart): {
         chart: chart,
