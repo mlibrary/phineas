@@ -93,7 +93,7 @@
       prototype(name, namespace=null): {
         local ns_mixin = if namespace == null then {} else {
           destination+: { namespace: namespace },
-          syncPolicy+: { syncOptions+: ['CreateNamespace=true'] },
+          syncPolicy+: { syncOptions: ['CreateNamespace=true'] },
         },
 
         apiVersion: 'argoproj.io/v1alpha1',
@@ -111,7 +111,6 @@
             server: 'https://kubernetes.default.svc',
           },
           syncPolicy: {
-            syncOptions: ['ServerSideApply=true'],
             automated: {
               prune: false,
               selfHeal: true,
