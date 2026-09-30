@@ -1,0 +1,4 @@
+The Solr Operator / Solr Cloud / ZooKeeper CRDs are included under lib/phineas/solr. They were
+retrieved from the links available at https://solr.apache.org/operator/artifacts.html. They are also
+available (as well as the original NOTICE) in the Solr Operator GitHub repository at:
+https://github.com/apache/solr-operator
