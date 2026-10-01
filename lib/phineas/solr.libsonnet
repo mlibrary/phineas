@@ -190,7 +190,8 @@
           annotations+: {
             'argocd.argoproj.io/sync-wave': '-10',
           }
-        }
+        },
+        spec+: { syncPolicy+: { syncOptions+: ['ServerSideApply=true'] } }
       },
 
     /**
@@ -222,6 +223,7 @@
           },
         },
         spec+: {
+          syncPolicy+: { syncOptions+: ['ServerSideApply=true'] },
           source+: {
             helm+: {
               values: std.manifestYamlDoc({
@@ -332,6 +334,7 @@
             'argocd.argoproj.io/sync-wave': '10',
           },
         },
+        spec+: { syncPolicy+: { syncOptions+: ['ServerSideApply=true'] } },
       },
     ],
 
