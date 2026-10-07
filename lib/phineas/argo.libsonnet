@@ -278,9 +278,14 @@
 
       /**
         * Generate the source for a Tanka environment; see $.argo.app.tanka
+        *
+        * Note that the current (v1.0, 2026) tanka-cmp plugin expects a path of `.`
+        * for detection. The strategy for managing Jsonnet that Argo CD applies
+        * is subject to change, possibly relying on the built-in support, with its
+        * rich "build environment" availble to supply app name, path, etc.
         */
       tanka(path, repoURL=$.argo.config.repoURL, targetRevision='HEAD'):
-        $.argo.source.git(path, repoURL, targetRevision) + {
+        $.argo.source.git('.', repoURL, targetRevision) + {
           plugin+: {
             env+: [
               {
