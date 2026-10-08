@@ -1,5 +1,25 @@
 (import 'phineas/argo.libsonnet') +
 {
+  /**
+   * Namespace for managing Solr Operator and SolrCloud instances.
+   *
+   * General usage will include three function calls in your config
+   * repository: .crds(), .operator(), and .cloud(). The installation order
+   * will be managed by the included sync-wave annotations.
+   *
+   * The current configuration uses the default security bootstrap, so there
+   * will be a manual step required to update/manage credentials and remove
+   * that secret. Alternatively, you could supply a security configuration
+   * (which may be aided by library functions in the future).
+   *
+   * You are encouraged to set set the $.phineas.revision to the hash of when
+   * the CRDs of your desired version were added (see the solr-x.y.z tags).
+   * This is because the version of phineas that is vendored into your config
+   * repository is separate from the version referenced by the CRD application.
+   * By setting $.phineas.revision, the application will refer to a fixed point
+   * in time where you can know the exact content of the CRDs referenced. This
+   * is similar to using a hash for GitHub Actions rather than a version tag.
+   */
   solr:: {
     /** References for Solr Operator and SolrCloud charts */
     charts: {

@@ -1,6 +1,12 @@
 {
   phineas:: {
     repoURL: 'https://github.com/mlibrary/phineas',
+    /**
+     * The version of phineas to be used by Argo CD Applications that refer to
+     * fixed content like CRDs. Using 'HEAD' is generally safe, but you can be
+     * more assured of the repository state and file contents if you set this
+     * value to a tag or specific commit with exact the manifests you want.
+     */
     revision: 'HEAD',
   },
 
