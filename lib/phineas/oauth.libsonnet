@@ -1,5 +1,9 @@
 {
   oauth:: {
+    defaults: {
+      image: 'quay.io/oauth2-proxy/oauth2-proxy:v7.15.6',
+    },
+
     /**
       * Generate a complete oauth2-proxy (OIDC authenticator) installation.
       *
@@ -107,7 +111,7 @@
                   '--upstream=file:///dev/null',
                   '--http-address=0.0.0.0:4180',
                 ],
-                image: 'quay.io/oauth2-proxy/oauth2-proxy:v7.6.0',
+                image: $.oauth.defaults.image,
                 imagePullPolicy: 'IfNotPresent',
                 name: 'oauth2-proxy',
                 ports: [{
