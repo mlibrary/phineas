@@ -38,7 +38,7 @@
     /** Default configuration to be cloned and extended if customizations are needed */
     config: {
       image: {
-        tag: '9.10',
+        tag: '9.11',
       },
 
       /** Resources for each SolrCloud node; used as `podOptions.resources` values */
